@@ -18,7 +18,7 @@ export default class AppLogsView extends ApiComponent<
         expandedLogs: boolean
         appLogsStringified: string
         isWrapped: boolean,
-        logSearchValue: string
+        logSearchPattern: string
     }
 > {
     constructor(props: any) {
@@ -27,7 +27,7 @@ export default class AppLogsView extends ApiComponent<
             isWrapped: true,
             expandedLogs: true,
             appLogsStringified: '',
-            logSearchValue: ''
+            logSearchPattern: ''
         }
     }
 
@@ -69,7 +69,7 @@ export default class AppLogsView extends ApiComponent<
                     .map((a) => {
                         return a.text
                     })
-                    .filter(logText => logText.includes(self.state.logSearchValue))
+                    .filter(logText => (logText.match(self.state.logSearchPattern)?.length ?? 0) > 0)
                     .join('')
                     .replace(ansiRegex, '')
 
@@ -218,7 +218,7 @@ export default class AppLogsView extends ApiComponent<
                                     : 'pre',
                                 paddingBottom: '10px',
                             }}
-                            onSearch={(value) => self.setState({ logSearchValue: value })}
+                            onSearch={(value) => self.setState({ logSearchPattern: value })}
                         />
                         <Input.TextArea
                             id="applogs-text-id"
